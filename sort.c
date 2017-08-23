@@ -3,23 +3,24 @@
 void insertSort(int* nums, int numSize)
 {
     int* sortArr = (int*)malloc(numSize*sizeof(int));
+    memcpy(sortAry, nums, numSize*sizeof(int));
 
     int i = 0, j = 0, p = 0;
-    sortArr[i] = nums[i];
     for (i = 1; i < numSize; i++) {
-        for (j = 0; j < i; j++) {
-            if (nums[i] < sortArr[j]) {
+        for (j = i-1; j > 0; j--) {
+            if (sortArr[j] < sortArr[i]) {
                 break;
             }
         }
-        int p = j;
 
-        if (j < i) {
-            for (j = i-1; j >= p; j--) {
-                sortArr[j+1] = sortArr[j];
+        int insertVal = sortArr[i];
+        if (j != i-1) {
+            int k;
+            for (k = i; k > j+1; k--) {
+                sortArr[k] = sortArr[k-1];
             }
         }
-        sortArr[p] = nums[i];
+        sortArr[k] = insertVal;
     }
 
     for (i = 0; i < numSize; i++) {
