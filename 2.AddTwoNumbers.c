@@ -115,4 +115,9 @@ int main()
         pa = pa->next;
     }
     printf("\n");
+
+    for (i = 0; i < 7; i++) {
+        printf("%c ", 'a' + rand()%(26));
+    }
+    printf("\n");
 }
