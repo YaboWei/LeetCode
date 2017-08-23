@@ -2,29 +2,29 @@
 #include <limits.h>
 void insertSort(int* nums, int numSize)
 {
-    int* sortArr = (int*)malloc(numSize*sizeof(int));
+    int* sortAry = (int*)malloc(numSize*sizeof(int));
     memcpy(sortAry, nums, numSize*sizeof(int));
 
     int i = 0, j = 0, p = 0;
     for (i = 1; i < numSize; i++) {
         for (j = i-1; j > 0; j--) {
-            if (sortArr[j] < sortArr[i]) {
+            if (sortAry[j] < sortAry[i]) {
                 break;
             }
         }
 
-        int insertVal = sortArr[i];
+        int insertVal = sortAry[i];
         if (j != i-1) {
             int k;
             for (k = i; k > j+1; k--) {
-                sortArr[k] = sortArr[k-1];
+                sortAry[k] = sortAry[k-1];
             }
         }
-        sortArr[k] = insertVal;
+        sortAry[j+1] = insertVal;
     }
 
     for (i = 0; i < numSize; i++) {
-        printf("%d ", sortArr[i]);
+        printf("%d ", sortAry[i]);
     }
     printf("\n");
 }
@@ -110,10 +110,10 @@ void quickeSort(int* nums, int numSize)
     int* sortAry = (int*)malloc(numSize*sizeof(int));
     memcpy(sortAry, nums, numSize*sizeof(int));
 
-    qSort(nums, 0, numSize-1);
+    qSort(sortAry, 0, numSize-1);
     int i;
     for (i = 0; i < numSize; i++) {
-        printf("%d ", nums[i]);
+        printf("%d ", sortAry[i]);
     }
     printf("\n");
 }
@@ -125,9 +125,9 @@ void heaperAdjust(int* nums, int root, int numSize)
     i = root * 2 + 1;
 
     while (i < numSize) {
-        if (i + 1 < numSize && nums[i] > nums[i+1]) i++;
+        if (i + 1 < numSize && nums[i] < nums[i+1]) i++;
 
-        if (nums[i] >= r_val) {
+        if (nums[i] <= r_val) {
             break;
         }
 
@@ -147,19 +147,19 @@ void heaperSort(int* nums, int numSize)
     int last_root = (numSize - 1) / 2;
     int i;
     for (i = last_root; i >= 0; i--) {
-        heaperAdjust(nums, i, numSize);
+        heaperAdjust(sortAry, i, numSize);
     }
 
     for (i = numSize-1; i > 0; i--) {
-        nums[0] = nums[i] - nums[0];
-        nums[i] = nums[i] - nums[0];
-        nums[0] = nums[i] + nums[0];
+        sortAry[0] = sortAry[i] - sortAry[0];
+        sortAry[i] = sortAry[i] - sortAry[0];
+        sortAry[0] = sortAry[i] + sortAry[0];
 
-        heaperAdjust(nums, 0, i);
+        heaperAdjust(sortAry, 0, i);
     }
 
     for (i = 0; i < numSize; i++) {
-        printf("%d ", nums[i]);
+        printf("%d ", sortAry[i]);
     }
     printf("\n");
 }
@@ -195,13 +195,70 @@ void shelllSort(int* nums, int numSize)
     int step = numSize / 2;
 
     while (step >= 1) {
-        shellInsertSort(nums, step, numSize);
+        shellInsertSort(sortAry, step, numSize);
         step /= 2;
     }
 
     int i;
     for (i = 0; i < numSize; i++) {
-        printf("%d ", nums[i]);
+        printf("%d ", sortAry[i]);
+    }
+    printf("\n");
+}
+
+void mMerge(int* nums, int start1, int end1, int start2, int end2)
+{
+    printf("merge %d-%d, %d->%d\n", start1, end1, start2, end2);
+    int len = end2-start1+1;
+    int* sortBuf = (int*)malloc(sizeof(int)*len);
+    int i = 0;
+    while (start1 <= end1 && start2 <= end2) {
+        if (nums[start1] < nums[start2]) {
+            sortBuf[i++] = nums[start1];
+            start1++;
+        } else {
+            sortBuf[i++] = nums[start2];
+            start2++;
+        }
+    }
+
+    while (start1 <= end1) {
+        sortBuf[i++] = nums[start1++];
+    }
+
+    while (start2 <= end2) {
+        sortBuf[i++] = nums[start2++];
+    }
+
+    for (i = 0; i < len; i++) {
+        nums[end2-i] = sortBuf[len-1-i];
+        printf("len: %d %d->%d\n", len, end2-i, nums[end2-i]);
+    }
+    for (i = 0; i < len; i++) {
+        printf("%d ", nums[end2-i-1]);
+    }
+    printf("\n");
+}
+
+void mSort(int* nums, int start, int end)
+{
+    if (start < end) {
+        int mid = (start+end)/2;
+        mSort(nums, start, mid);
+        mSort(nums, mid+1, end);
+        mMerge(nums, start, mid, mid+1, end);
+    }
+}
+
+void mergerSort(int* nums, int numSize)
+{
+    int* sortAry = (int*)malloc(numSize*sizeof(int));
+    memcpy(sortAry, nums, numSize*sizeof(int));
+
+    mSort(sortAry, 0, numSize-1);
+    int i;
+    for (i = 0; i < numSize; i++) {
+        printf("%d ", sortAry[i]);
     }
     printf("\n");
 }
@@ -220,5 +277,6 @@ int main()
     //bubbleSort(arr, sizeof(arr)/sizeof(int));
     //quickeSort(arr, sizeof(arr)/sizeof(int));
     //heaperSort(arr, sizeof(arr)/sizeof(int));
-    shelllSort(arr, sizeof(arr)/sizeof(int));
+    //shelllSort(arr, sizeof(arr)/sizeof(int));
+    mergerSort(arr, sizeof(arr)/sizeof(int));
 }
