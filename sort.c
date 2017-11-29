@@ -275,8 +275,8 @@ int main()
     //insertSort(arr, sizeof(arr)/sizeof(int));
     //selectSort(arr, sizeof(arr)/sizeof(int));
     //bubbleSort(arr, sizeof(arr)/sizeof(int));
-    //quickeSort(arr, sizeof(arr)/sizeof(int));
+    quickeSort(arr, sizeof(arr)/sizeof(int));
     //heaperSort(arr, sizeof(arr)/sizeof(int));
     //shelllSort(arr, sizeof(arr)/sizeof(int));
-    mergerSort(arr, sizeof(arr)/sizeof(int));
+    //mergerSort(arr, sizeof(arr)/sizeof(int));
 }
