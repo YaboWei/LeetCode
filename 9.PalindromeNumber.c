@@ -5,9 +5,13 @@
 bool isPalindrome(int x) {
     int rev = 0;
 
+    if (x == 0) {
+        return 1;
+    }
     if (x % 10 == 0) {
         return 0;
     }
+
     while (x > rev) {
         rev = rev * 10 + x % 10;
         x /= 10;
